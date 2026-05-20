@@ -592,6 +592,23 @@
             vertical-align: middle;
         }
 
+        .tie-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, rgba(130,205,39,0.15), rgba(130,205,39,0.05));
+            border: 1px solid rgba(130,205,39,0.3);
+            color: var(--neon);
+            font-size: 0.65rem;
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: 0.1em;
+            padding: 3px 10px;
+            border-radius: 4px;
+            margin-left: 10px;
+            vertical-align: middle;
+            box-shadow: 0 0 10px rgba(130,205,39,0.1);
+        }
+
         .td-flow {
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.8rem;
@@ -950,21 +967,39 @@
             const tbody = document.getElementById('tabel-hasil');
             
             tbody.innerHTML = '';
+            if (data.length === 0) {
+                return;
+            }
+
+            const maxNetFlow = data[0].net_flow;
+            const isTie = data.filter(item => Math.abs(item.net_flow - maxNetFlow) < 0.0001).length > 1;
+
             data.forEach((item, index) => {
-                const rank = index + 1;
-                const isRank1 = rank === 1;
+                const isTop = Math.abs(item.net_flow - maxNetFlow) < 0.0001;
+                const rank = isTop ? 1 : index + 1;
                 
                 const tr = document.createElement('tr');
-                if (isRank1) tr.className = 'rank-1';
+                if (isTop) {
+                    tr.className = 'rank-1';
+                }
                 
                 const scoreClass = item.net_flow >= 0 ? 'score-positive' : 'score-negative';
                 const formattedScore = (item.net_flow >= 0 ? '+' : '') + item.net_flow.toFixed(4);
 
+                let badgeHtml = '';
+                if (isTop) {
+                    if (isTie) {
+                        badgeHtml = '<span class="tie-badge">🤝 SERI (REKOMENDASI)</span>';
+                    } else {
+                        badgeHtml = '<span class="trophy-badge">🏆 REKOMENDASI</span>';
+                    }
+                }
+
                 tr.innerHTML = `
-                    <td class="${isRank1 ? 'td-rank-1' : 'td-rank'}">${rank}</td>
-                    <td class="${isRank1 ? 'td-name-1' : 'td-name'}">
+                    <td class="${isTop ? 'td-rank-1' : 'td-rank'}">${rank}</td>
+                    <td class="${isTop ? 'td-name-1' : 'td-name'}">
                         ${escapeHtml(item.name)}
-                        ${isRank1 ? '<span class="trophy-badge">🏆 REKOMENDASI</span>' : ''}
+                        ${badgeHtml}
                     </td>
                     <td class="td-flow">${item.leaving_flow.toFixed(4)}</td>
                     <td class="td-flow">${item.entering_flow.toFixed(4)}</td>
