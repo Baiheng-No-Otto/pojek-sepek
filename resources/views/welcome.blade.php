@@ -668,7 +668,26 @@
             <div class="logo-dot"></div>
             <span class="logo-skin">SKIN</span><span class="logo-decide">DECIDE</span>
         </div>
-        <div class="header-badge">Promethee Team</div>
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <a href="/kriteria" style="
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 0.65rem;
+                letter-spacing: 0.15em;
+                color: var(--neon);
+                border: 1px solid var(--border-hover);
+                background: var(--neon-dim);
+                padding: 5px 14px;
+                border-radius: 4px;
+                text-decoration: none;
+                text-transform: uppercase;
+                transition: all 0.2s ease;
+                box-shadow: 0 0 10px rgba(130,205,39,0.15);
+            " onmouseover="this.style.background='var(--neon)'; this.style.color='#000'; this.style.borderColor='var(--neon)'" 
+               onmouseout="this.style.background='var(--neon-dim)'; this.style.color='var(--neon)'; this.style.borderColor='var(--border-hover)'">
+                Pengaturan Kriteria
+            </a>
+            <div class="header-badge">Promethee Team</div>
+        </div>
     </header>
 
     <main>
@@ -731,13 +750,13 @@
     </footer>
 
     <script>
-        const daftarKriteria = @json(\App\Libraries\Promethee::skinCriteria()).map((criteria) => ({
+        const daftarKriteria = @json(\App\Models\Criteria::orderBy('id')->get()).map((criteria) => ({
             id: criteria.id,
             name: criteria.name,
-            isHarga: criteria.id === 1,
-            isRarity: criteria.id === 2,
-            isPreferensi: criteria.id === 7,
-            isKetersediaan: criteria.id === 8,
+            isHarga: criteria.name.toLowerCase().includes('harga'),
+            isRarity: criteria.name.toLowerCase().includes('rarity') || criteria.name.toLowerCase().includes('kategori'),
+            isPreferensi: criteria.name.toLowerCase().includes('preferensi'),
+            isKetersediaan: criteria.name.toLowerCase().includes('ketersediaan'),
         }));
 
         function escapeHtml(value) {

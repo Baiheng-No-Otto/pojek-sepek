@@ -2,10 +2,20 @@
 
 namespace Tests\Feature;
 
+use Database\Seeders\CriteriaSeeder;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class SkinRecommendationTest extends TestCase
 {
+    use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed(CriteriaSeeder::class);
+    }
+
     public function test_welcome_page_renders_promethee_skin_form(): void
     {
         $response = $this->get('/');

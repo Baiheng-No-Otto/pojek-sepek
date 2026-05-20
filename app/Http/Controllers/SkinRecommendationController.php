@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Libraries\Promethee;
+use App\Models\Criteria;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -11,19 +12,28 @@ class SkinRecommendationController extends Controller
 {
     public function hitungRekomendasi(Request $request, Promethee $promethee): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
+        $criteria = Criteria::all();
+
+        $rules = [
             'alternatives' => ['required', 'array', 'min:2'],
             'alternatives.*.name' => ['required', 'string', 'max:100'],
             'alternatives.*.scores' => ['required', 'array'],
-            'alternatives.*.scores.1' => ['required', 'numeric', 'min:0'],
-            'alternatives.*.scores.2' => ['required', 'numeric', 'between:1,6'],
-            'alternatives.*.scores.3' => ['required', 'numeric', 'between:1,7'],
-            'alternatives.*.scores.4' => ['required', 'numeric', 'between:1,7'],
-            'alternatives.*.scores.5' => ['required', 'numeric', 'between:1,7'],
-            'alternatives.*.scores.6' => ['required', 'numeric', 'between:1,7'],
-            'alternatives.*.scores.7' => ['required', 'numeric', 'between:1,7'],
-            'alternatives.*.scores.8' => ['required', 'numeric', 'between:1,2'],
-        ], [
+        ];
+
+        foreach ($criteria as $criterion) {
+            $nameLower = strtolower($criterion->name);
+            if (str_contains($nameLower, 'harga')) {
+                $rules["alternatives.*.scores.{$criterion->id}"] = ['required', 'numeric', 'min:0'];
+            } elseif (str_contains($nameLower, 'rarity') || str_contains($nameLower, 'kategori')) {
+                $rules["alternatives.*.scores.{$criterion->id}"] = ['required', 'numeric', 'between:1,6'];
+            } elseif (str_contains($nameLower, 'ketersediaan')) {
+                $rules["alternatives.*.scores.{$criterion->id}"] = ['required', 'numeric', 'between:1,2'];
+            } else {
+                $rules["alternatives.*.scores.{$criterion->id}"] = ['required', 'numeric', 'between:1,7'];
+            }
+        }
+
+        $validator = Validator::make($request->all(), $rules, [
             'alternatives.min' => 'Bandingkan minimal 2 skin agar sistem bisa menghitung peringkatnya.',
         ]);
 
@@ -35,9 +45,22 @@ class SkinRecommendationController extends Controller
             ], 422);
         }
 
+        $criteriaData = $criteria->map(function ($c) {
+            return [
+                'id' => $c->id,
+                'name' => $c->name,
+                'direction' => $c->type === 'minimize' ? 'min' : 'max',
+                'weight' => $c->weight,
+                'preference_function' => $c->preference_function,
+                'p' => $c->p,
+                'q' => $c->q,
+                's' => $c->s,
+            ];
+        })->toArray();
+
         $hasilPeringkat = $promethee->calculate(
             $validator->validated()['alternatives'],
-            Promethee::skinCriteria(),
+            $criteriaData,
         );
 
         return response()->json([
