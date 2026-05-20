@@ -25,6 +25,9 @@ class CriteriaTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Kriteria Tes');
         $response->assertSee('1.5');
+        $response->assertDontSee('onchange="toggleParams(this', false);
+        $response->assertDontSee('onclick="confirmDelete(', false);
+        $response->assertDontSee('style="display:none;"', false);
     }
 
     public function test_user_can_create_new_criteria(): void

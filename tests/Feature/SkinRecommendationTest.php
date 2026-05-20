@@ -23,6 +23,9 @@ class SkinRecommendationTest extends TestCase
         $response->assertOk();
         $response->assertSee('SkinDecide');
         $response->assertSee('Promethee', false);
+        $response->assertSee('data-criterias=', false);
+        $response->assertDontSee('onsubmit="prosesHitung(event)"', false);
+        $response->assertDontSee('onclick="tambahBarisSkin()"', false);
     }
 
     public function test_recommendation_api_returns_ranked_skin_results(): void

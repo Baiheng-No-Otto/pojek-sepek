@@ -1,10 +1,13 @@
 <?php
 
 use App\Http\Controllers\CriteriaController;
+use App\Models\Criteria;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('welcome', [
+        'criterias' => Criteria::orderBy('id')->get(['id', 'name']),
+    ]);
 });
 
 Route::get('/kriteria', [CriteriaController::class, 'index'])->name('kriteria.index');
