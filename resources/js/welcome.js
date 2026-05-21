@@ -3,6 +3,7 @@ import './bootstrap';
 window.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('spkForm');
     const addButton = document.getElementById('btn-add-skin');
+    const clearSavedButton = document.getElementById('btn-clear-saved');
     const container = document.getElementById('container-alternatif');
     const sectionHasil = document.getElementById('section-hasil');
 
@@ -11,39 +12,65 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     const daftarKriteria = getCriteriaDefinitions();
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ?? '';
     let urutanSkin = 0;
+    let saveTimeout = null;
 
     addButton.addEventListener('click', () => {
         tambahBarisSkin();
+        schedulePersistWelcomeInputs();
     });
 
+    clearSavedButton?.addEventListener('click', clearSavedInputs);
     form.addEventListener('submit', prosesHitung);
     container.addEventListener('click', handleContainerClick);
+    container.addEventListener('input', schedulePersistWelcomeInputs);
+    container.addEventListener('change', schedulePersistWelcomeInputs);
 
-    tambahBarisSkin();
-    tambahBarisSkin();
+    hydrateSavedInputs();
 
     function getCriteriaDefinitions() {
-        const rawData = document.body?.dataset.criterias;
+        return parseDataset('criterias', []).map((criteria) => ({
+            id: criteria.id,
+            name: criteria.name,
+            isHarga: criteria.name.toLowerCase().includes('harga'),
+            isRarity: criteria.name.toLowerCase().includes('rarity') || criteria.name.toLowerCase().includes('kategori'),
+            isPreferensi: criteria.name.toLowerCase().includes('preferensi'),
+            isKetersediaan: criteria.name.toLowerCase().includes('ketersediaan'),
+        }));
+    }
+
+    function getSavedInputs() {
+        return parseDataset('savedInputs', { alternatives: [] });
+    }
+
+    function parseDataset(key, defaultValue) {
+        const rawData = document.body?.dataset[key];
 
         if (!rawData) {
-            return [];
+            return defaultValue;
         }
 
         try {
-            return JSON.parse(rawData).map((criteria) => ({
-                id: criteria.id,
-                name: criteria.name,
-                isHarga: criteria.name.toLowerCase().includes('harga'),
-                isRarity: criteria.name.toLowerCase().includes('rarity') || criteria.name.toLowerCase().includes('kategori'),
-                isPreferensi: criteria.name.toLowerCase().includes('preferensi'),
-                isKetersediaan: criteria.name.toLowerCase().includes('ketersediaan'),
-            }));
+            return JSON.parse(rawData);
         } catch (error) {
             console.error(error);
 
-            return [];
+            return defaultValue;
         }
+    }
+
+    function hydrateSavedInputs() {
+        const savedAlternatives = getSavedInputs().alternatives ?? [];
+
+        if (savedAlternatives.length > 0) {
+            savedAlternatives.forEach((alternative) => tambahBarisSkin(alternative));
+
+            return;
+        }
+
+        tambahBarisSkin();
+        tambahBarisSkin();
     }
 
     function escapeHtml(value) {
@@ -55,9 +82,24 @@ window.addEventListener('DOMContentLoaded', () => {
             .replace(/'/g, '&#039;');
     }
 
-    function tambahBarisSkin() {
+    function renderOption(value, label, selectedValue) {
+        const selected = String(selectedValue ?? '') === String(value) ? ' selected' : '';
+
+        return `<option value="${value}"${selected}>${label}</option>`;
+    }
+
+    function valueAttribute(value) {
+        if (value === null || value === undefined || value === '') {
+            return '';
+        }
+
+        return ` value="${escapeHtml(value)}"`;
+    }
+
+    function tambahBarisSkin(savedAlternative = null) {
         urutanSkin += 1;
 
+        const scores = savedAlternative?.scores ?? {};
         const card = document.createElement('div');
         card.className = 'skin-card class-skin-item';
         card.id = `skin-row-${urutanSkin}`;
@@ -65,62 +107,68 @@ window.addEventListener('DOMContentLoaded', () => {
 
         let criteriaHTML = '';
         daftarKriteria.forEach((kriteria) => {
+            const savedScore = scores[kriteria.id] ?? scores[String(kriteria.id)] ?? '';
+
             if (kriteria.isHarga) {
                 criteriaHTML += `
                         <div class="criteria-item">
                             <label>${kriteria.name}</label>
                             <input type="number" required name="kriteria_${kriteria.id}" placeholder="Misal: 1089"
-                                class="criteria-input">
+                                class="criteria-input"${valueAttribute(savedScore)}>
                             <p class="hint-text">Gacha: estimasi pity (Zodiac ~1500 · Collector ~4000 · Aspirants ~5000 · Legend ~9000)</p>
                         </div>`;
             } else if (kriteria.isRarity) {
+                const selectedValue = savedScore || 1;
                 criteriaHTML += `
                         <div class="criteria-item">
                             <label>${kriteria.name}</label>
                             <select name="kriteria_${kriteria.id}" class="criteria-select">
-                                <option value="1" selected>1 — Common (Basic / Elite / Season)</option>
-                                <option value="2">2 — Exceptional (Special / Starlight Regular)</option>
-                                <option value="3">3 — Deluxe (Epic Shop / Epic Squad Series / Zodiac)</option>
-                                <option value="4">4 — Exquisite (Epic Limited / Collector / Lucky Box / Starlight Annual)</option>
-                                <option value="5">5 — Grand (Collab Anime/Movie, Aspirants, Exorcists, Mistbenders)</option>
-                                <option value="6">6 — Legend (Legend Magic Wheel / Legend Limited Event)</option>
+                                ${renderOption(1, '1 — Common (Basic / Elite / Season)', selectedValue)}
+                                ${renderOption(2, '2 — Exceptional (Special / Starlight Regular)', selectedValue)}
+                                ${renderOption(3, '3 — Deluxe (Epic Shop / Epic Squad Series / Zodiac)', selectedValue)}
+                                ${renderOption(4, '4 — Exquisite (Epic Limited / Collector / Lucky Box / Starlight Annual)', selectedValue)}
+                                ${renderOption(5, '5 — Grand (Collab Anime/Movie, Aspirants, Exorcists, Mistbenders)', selectedValue)}
+                                ${renderOption(6, '6 — Legend (Legend Magic Wheel / Legend Limited Event)', selectedValue)}
                             </select>
                         </div>`;
             } else if (kriteria.isPreferensi) {
+                const selectedValue = savedScore || 4;
                 criteriaHTML += `
                         <div class="criteria-item">
                             <label>${kriteria.name}</label>
                             <select name="kriteria_${kriteria.id}" class="criteria-select">
-                                <option value="1">1 — Tidak Pernah Dipakai</option>
-                                <option value="2">2 — Sangat Jarang Dipakai</option>
-                                <option value="3">3 — Jarang Dipakai</option>
-                                <option value="4" selected>4 — Kadang-kadang</option>
-                                <option value="5">5 — Sering Dipakai</option>
-                                <option value="6">6 — Sangat Sering Dipakai</option>
-                                <option value="7">7 — Hero Andalan Utama (Signature)</option>
+                                ${renderOption(1, '1 — Tidak Pernah Dipakai', selectedValue)}
+                                ${renderOption(2, '2 — Sangat Jarang Dipakai', selectedValue)}
+                                ${renderOption(3, '3 — Jarang Dipakai', selectedValue)}
+                                ${renderOption(4, '4 — Kadang-kadang', selectedValue)}
+                                ${renderOption(5, '5 — Sering Dipakai', selectedValue)}
+                                ${renderOption(6, '6 — Sangat Sering Dipakai', selectedValue)}
+                                ${renderOption(7, '7 — Hero Andalan Utama (Signature)', selectedValue)}
                             </select>
                         </div>`;
             } else if (kriteria.isKetersediaan) {
+                const selectedValue = savedScore || 1;
                 criteriaHTML += `
                         <div class="criteria-item">
                             <label>${kriteria.name}</label>
                             <select name="kriteria_${kriteria.id}" class="criteria-select">
-                                <option value="1" selected>Dapat Dibeli Kapan Saja di Shop</option>
-                                <option value="2">Hanya Bisa Dibeli Saat Event Berlangsung (Limited)</option>
+                                ${renderOption(1, 'Dapat Dibeli Kapan Saja di Shop', selectedValue)}
+                                ${renderOption(2, 'Hanya Bisa Dibeli Saat Event Berlangsung (Limited)', selectedValue)}
                             </select>
                         </div>`;
             } else {
+                const selectedValue = savedScore || 4;
                 criteriaHTML += `
                         <div class="criteria-item">
                             <label>${kriteria.name}</label>
                             <select name="kriteria_${kriteria.id}" class="criteria-select">
-                                <option value="1">1 — Sangat Kurang</option>
-                                <option value="2">2 — Kurang</option>
-                                <option value="3">3 — Agak Kurang</option>
-                                <option value="4" selected>4 — Standar</option>
-                                <option value="5">5 — Lumayan Bagus</option>
-                                <option value="6">6 — Bagus</option>
-                                <option value="7">7 — Sangat Bagus</option>
+                                ${renderOption(1, '1 — Sangat Kurang', selectedValue)}
+                                ${renderOption(2, '2 — Kurang', selectedValue)}
+                                ${renderOption(3, '3 — Agak Kurang', selectedValue)}
+                                ${renderOption(4, '4 — Standar', selectedValue)}
+                                ${renderOption(5, '5 — Lumayan Bagus', selectedValue)}
+                                ${renderOption(6, '6 — Bagus', selectedValue)}
+                                ${renderOption(7, '7 — Sangat Bagus', selectedValue)}
                             </select>
                         </div>`;
             }
@@ -136,7 +184,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 <div class="skin-name-section">
                     <label>Nama / Varian Skin</label>
                     <input type="text" required name="nama_skin" placeholder="Misal: Gusion Cosmic Gleam"
-                        class="input-name">
+                        class="input-name"${valueAttribute(savedAlternative?.name)}>
                 </div>
                 <div class="criteria-divider">
                     <div class="criteria-grid">${criteriaHTML}</div>
@@ -171,7 +219,79 @@ window.addEventListener('DOMContentLoaded', () => {
         }
 
         element.classList.add('is-removing');
-        window.setTimeout(() => element.remove(), 280);
+        window.setTimeout(() => {
+            element.remove();
+            schedulePersistWelcomeInputs();
+        }, 280);
+    }
+
+    function collectWelcomeInputs() {
+        return Array.from(document.querySelectorAll('.class-skin-item')).map((row) => {
+            const nama = row.querySelector('input[name="nama_skin"]')?.value ?? '';
+            const scores = {};
+
+            daftarKriteria.forEach((kriteria) => {
+                const input = row.querySelector(`[name="kriteria_${kriteria.id}"]`);
+                scores[kriteria.id] = input?.value ?? '';
+            });
+
+            return { name: nama, scores };
+        });
+    }
+
+    function schedulePersistWelcomeInputs() {
+        window.clearTimeout(saveTimeout);
+        saveTimeout = window.setTimeout(() => {
+            persistWelcomeInputs();
+        }, 350);
+    }
+
+    async function persistWelcomeInputs(showError = false) {
+        try {
+            await fetch('/skin-inputs', {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({ alternatives: collectWelcomeInputs() }),
+            });
+        } catch (error) {
+            console.error(error);
+
+            if (showError) {
+                shakeAlert('Input belum bisa disimpan ke sesi.');
+            }
+        }
+    }
+
+    async function clearSavedInputs() {
+        if (!window.confirm('Hapus semua input yang tersimpan di sesi browser ini?')) {
+            return;
+        }
+
+        try {
+            await fetch('/skin-inputs', {
+                method: 'DELETE',
+                credentials: 'same-origin',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json',
+                },
+            });
+
+            container.innerHTML = '';
+            sectionHasil.classList.remove('visible');
+            urutanSkin = 0;
+            tambahBarisSkin();
+            tambahBarisSkin();
+            shakeAlert('Input tersimpan sudah dihapus.');
+        } catch (error) {
+            console.error(error);
+            shakeAlert('Gagal menghapus input tersimpan.');
+        }
     }
 
     function shakeAlert(message) {
@@ -221,6 +341,8 @@ window.addEventListener('DOMContentLoaded', () => {
         });
 
         try {
+            await persistWelcomeInputs(true);
+
             const response = await fetch('/api/hitung-rekomendasi', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },

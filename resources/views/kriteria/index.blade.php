@@ -16,7 +16,15 @@
             <div class="logo-dot"></div>
             <span class="logo-skin">SKIN</span><span class="logo-decide">DECIDE</span>
         </a>
-        <a href="/" class="nav-link">← Halaman Utama</a>
+        <div class="nav-actions">
+            <span class="admin-chip">Admin: {{ auth()->user()->name }}</span>
+            <a href="{{ route('admin.password.edit') }}" class="nav-link">Reset Password</a>
+            <a href="/" class="nav-link">← Halaman Utama</a>
+            <form action="{{ route('logout') }}" method="POST" class="nav-form">
+                @csrf
+                <button type="submit" class="nav-link nav-button">Logout</button>
+            </form>
+        </div>
     </header>
 
     <main>
@@ -34,12 +42,31 @@
                         {{ session('success') }}
                     </div>
                 </div>
-@endif
+            @endif
+
+            @if($errors->any())
+                <div id="toast-container">
+                    <div class="toast toast-error">
+                        {{ $errors->first() }}
+                    </div>
+                </div>
+            @endif
 
             <form id="delete-form" class="delete-form" method="POST">
                 @csrf
                 @method('DELETE')
             </form>
+
+            <div class="admin-panel-card">
+                <div>
+                    <h2>Kontrol Admin</h2>
+                    <p>Gunakan reset untuk mengembalikan daftar kriteria ke nilai awal sistem.</p>
+                </div>
+                <form action="{{ route('kriteria.reset') }}" method="POST" onsubmit="return window.confirm('Kembalikan semua kriteria ke pengaturan awal? Kriteria tambahan/perubahan akan dihapus.');">
+                    @csrf
+                    <button type="submit" class="btn-action btn-danger">Reset Kriteria Semula</button>
+                </form>
+            </div>
 
             <div class="section-separator">
                 <h2>Daftar <span>Kriteria</span> Aktif</h2>

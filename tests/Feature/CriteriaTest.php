@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Criteria;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -10,9 +11,18 @@ class CriteriaTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_user_can_view_criteria_index_page(): void
+    private User $admin;
+
+    protected function setUp(): void
     {
-        $criteria = Criteria::create([
+        parent::setUp();
+
+        $this->admin = User::factory()->admin()->create();
+    }
+
+    public function test_admin_can_view_criteria_index_page(): void
+    {
+        Criteria::create([
             'name' => 'Kriteria Tes',
             'type' => 'maximize',
             'weight' => 1.5,
@@ -20,19 +30,20 @@ class CriteriaTest extends TestCase
             'p' => 5,
         ]);
 
-        $response = $this->get('/kriteria');
+        $response = $this->actingAs($this->admin)->get('/kriteria');
 
         $response->assertStatus(200);
         $response->assertSee('Kriteria Tes');
         $response->assertSee('1.5');
+        $response->assertSee('Reset Kriteria Semula');
         $response->assertDontSee('onchange="toggleParams(this', false);
         $response->assertDontSee('onclick="confirmDelete(', false);
         $response->assertDontSee('style="display:none;"', false);
     }
 
-    public function test_user_can_create_new_criteria(): void
+    public function test_admin_can_create_new_criteria(): void
     {
-        $response = $this->post('/kriteria', [
+        $response = $this->actingAs($this->admin)->post('/kriteria', [
             'name' => 'Kriteria Baru',
             'type' => 'maximize',
             'weight' => 2.0,
@@ -50,7 +61,7 @@ class CriteriaTest extends TestCase
         ]);
     }
 
-    public function test_user_can_update_existing_criteria(): void
+    public function test_admin_can_update_existing_criteria(): void
     {
         $criteria = Criteria::create([
             'name' => 'Kriteria Awal',
@@ -59,7 +70,7 @@ class CriteriaTest extends TestCase
             'preference_function' => 'usual',
         ]);
 
-        $response = $this->put("/kriteria/{$criteria->id}", [
+        $response = $this->actingAs($this->admin)->put("/kriteria/{$criteria->id}", [
             'name' => 'Kriteria Diubah',
             'type' => 'minimize',
             'weight' => 1.8,
@@ -80,7 +91,7 @@ class CriteriaTest extends TestCase
         ]);
     }
 
-    public function test_user_can_delete_criteria(): void
+    public function test_admin_can_delete_criteria(): void
     {
         $criteria = Criteria::create([
             'name' => 'Kriteria Hapus',
@@ -89,7 +100,7 @@ class CriteriaTest extends TestCase
             'preference_function' => 'usual',
         ]);
 
-        $response = $this->delete("/kriteria/{$criteria->id}");
+        $response = $this->actingAs($this->admin)->delete("/kriteria/{$criteria->id}");
 
         $response->assertRedirect('/kriteria');
         $this->assertDatabaseMissing('criterias', [

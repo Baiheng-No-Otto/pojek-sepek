@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SkinDecide</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Syne:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     @vite(['resources/css/welcome.css', 'resources/js/welcome.js'])
 </head>
-<body data-criterias='@json($criterias)'>
+<body data-criterias='@json($criterias)' data-saved-inputs='@json($savedWelcomeInputs)'>
 
     <header>
         <div class="logo">
@@ -42,6 +43,9 @@
                             <path d="M7.5 1v13M1 7.5h13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
                         </svg>
                         Tambah Pilihan Skin
+                    </button>
+                    <button type="button" class="btn-clear-saved" id="btn-clear-saved">
+                        Hapus Input Tersimpan
                     </button>
                     <button type="submit" class="btn-hitung" id="btn-hitung">
                         <div class="spinner" id="spinner"></div>
