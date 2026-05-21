@@ -8,19 +8,19 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminUserSeeder extends Seeder
 {
-    public const DEFAULT_EMAIL = 'admin@skindecide.test';
+    public const DEFAULT_USERNAME = 'admin';
 
-    public const DEFAULT_PASSWORD = 'Admin12345!';
+    public const DEFAULT_PASSWORD = 'admin123';
 
     public function run(): void
     {
         User::updateOrCreate(
-            ['email' => self::DEFAULT_EMAIL],
+            ['username' => self::DEFAULT_USERNAME],
             [
                 'name' => 'Administrator',
                 'password' => Hash::make(self::DEFAULT_PASSWORD),
                 'is_admin' => true,
-                'email_verified_at' => now(),
+                'username_verified_at' => now(),
             ],
         );
     }

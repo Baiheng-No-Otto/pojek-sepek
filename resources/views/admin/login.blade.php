@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Syne:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    @vite(['resources/css/kriteria.css'])
+    @vite(['resources/css/pengaturan.css'])
 </head>
 <body>
     <header>
@@ -39,8 +39,8 @@
                     @csrf
 
                     <div class="form-group">
-                        <label class="form-label">Username / Email Admin</label>
-                        <input type="email" name="email" value="{{ old('email') }}" required autofocus class="form-input" placeholder="admin@skindecide.test">
+                        <label class="form-label">Username Admin</label>
+                        <input type="text" name="username" value="{{ old('username') }}" required autofocus class="form-input" placeholder="admin">
                     </div>
 
                     <div class="form-group">

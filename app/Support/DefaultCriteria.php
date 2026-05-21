@@ -18,7 +18,7 @@ class DefaultCriteria
             ['name' => 'Portrait Skin', 'type' => 'maximize', 'weight' => 1.0, 'preference_function' => 'usual', 'p' => 0, 'q' => 0, 's' => 0],
             ['name' => 'Animasi Entrance', 'type' => 'maximize', 'weight' => 1.0, 'preference_function' => 'usual', 'p' => 0, 'q' => 0, 's' => 0],
             ['name' => 'In-Game Effect', 'type' => 'maximize', 'weight' => 1.0, 'preference_function' => 'usual', 'p' => 0, 'q' => 0, 's' => 0],
-            ['name' => 'Tingkat Preferensi Hero', 'type' => 'maximize', 'weight' => 1.0, 'preference_function' => 'quasi', 'p' => 0, 'q' => 0, 's' => 0],
+            ['name' => 'Tingkat Preferensi Hero', 'type' => 'maximize', 'weight' => 1.0, 'preference_function' => 'usual', 'p' => 0, 'q' => 0, 's' => 0],
             ['name' => 'Status Ketersediaan Skin', 'type' => 'maximize', 'weight' => 1.0, 'preference_function' => 'usual', 'p' => 0, 'q' => 0, 's' => 0],
         ];
     }

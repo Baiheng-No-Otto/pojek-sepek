@@ -17,7 +17,7 @@
             <span class="logo-skin">SKIN</span><span class="logo-decide">DECIDE</span>
         </div>
       <div class="header-actions">
-    <a href="/kriteria" class="header-link" style="text-transform: uppercase; font-size: 13px; letter-spacing: 1px; display: inline-flex; align-items: center; gap: 6px;">
+    <a href="/pengaturan" class="header-link" style="text-transform: uppercase; font-size: 13px; letter-spacing: 1px; display: inline-flex; align-items: center; gap: 6px;">
         ← HALAMAN PENGATURAN
     </a>
 </div>
@@ -32,7 +32,7 @@
                 <p>Sesuaikan tampilan background website SkinDecide dengan gambar pilihanmu sendiri langsung dari file lokal.</p>
             </div>
 
-            <div class="skin-card" style="position: relative; padding: 30px; margin-top: 20px;">
+            <div class="skin-card" style="position: relative; padding: 40px; margin-top: 20px;">
                 <div class="corner-deco corner-deco-tl"></div>
                 <div class="corner-deco corner-deco-tr"></div>
                 <div class="corner-deco corner-deco-bl"></div>
@@ -47,7 +47,7 @@
                     </div>
                 </div>
 
-                <div class="actions-row" style="display: flex; gap: 15px; margin-top: 20px; margin-bottom: 20px;">
+                <div class="actions-row custom-bg-actions-row">
                     <button type="button" id="btn-pilih-foto" class="btn-add" style="margin: 0; flex: 1; justify-content: center;">
                         Pilih Gambar Lokal
                     </button>

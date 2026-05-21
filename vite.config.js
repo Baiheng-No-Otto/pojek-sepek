@@ -10,8 +10,8 @@ export default defineConfig({
                 'resources/js/app.js',
                 'resources/css/welcome.css',
                 'resources/js/welcome.js',
-                'resources/css/kriteria.css',
-                'resources/js/kriteria.js',
+                'resources/css/pengaturan.css',
+                'resources/js/pengaturan.js',
                 'resources/js/custom-bg-page.js'
             ],
             refresh: true,

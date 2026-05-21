@@ -10,11 +10,11 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
-class CriteriaController extends Controller
+class PengaturanController extends Controller
 {
     public function index(): View
     {
-        return view('kriteria.index', [
+        return view('pengaturan.index', [
             'criterias' => Criteria::orderBy('id')->get(),
         ]);
     }
@@ -23,21 +23,21 @@ class CriteriaController extends Controller
     {
         Criteria::create($this->criteriaData($request->validated()));
 
-        return redirect()->route('kriteria.index')->with('success', 'Kriteria baru berhasil ditambahkan!');
+        return redirect()->route('pengaturan.index')->with('success', 'Kriteria baru berhasil ditambahkan!');
     }
 
     public function update(UpdateCriteriaRequest $request, Criteria $criteria): RedirectResponse
     {
         $criteria->update($this->criteriaData($request->validated()));
 
-        return redirect()->route('kriteria.index')->with('success', 'Kriteria berhasil diperbarui!');
+        return redirect()->route('pengaturan.index')->with('success', 'Kriteria berhasil diperbarui!');
     }
 
     public function destroy(Criteria $criteria): RedirectResponse
     {
         $criteria->delete();
 
-        return redirect()->route('kriteria.index')->with('success', 'Kriteria berhasil dihapus!');
+        return redirect()->route('pengaturan.index')->with('success', 'Kriteria berhasil dihapus!');
     }
 
     public function reset(): RedirectResponse
@@ -47,7 +47,7 @@ class CriteriaController extends Controller
             Criteria::insert(DefaultCriteria::recordsWithTimestamps());
         });
 
-        return redirect()->route('kriteria.index')->with('success', 'Kriteria berhasil dikembalikan ke pengaturan awal.');
+        return redirect()->route('pengaturan.index')->with('success', 'Kriteria berhasil dikembalikan ke pengaturan awal.');
     }
 
     /**

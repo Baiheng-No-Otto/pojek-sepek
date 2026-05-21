@@ -30,7 +30,7 @@ class CriteriaTest extends TestCase
             'p' => 5,
         ]);
 
-        $response = $this->actingAs($this->admin)->get('/kriteria');
+        $response = $this->actingAs($this->admin)->get('/pengaturan');
 
         $response->assertStatus(200);
         $response->assertSee('Kriteria Tes');
@@ -43,7 +43,7 @@ class CriteriaTest extends TestCase
 
     public function test_admin_can_create_new_criteria(): void
     {
-        $response = $this->actingAs($this->admin)->post('/kriteria', [
+        $response = $this->actingAs($this->admin)->post('/pengaturan', [
             'name' => 'Kriteria Baru',
             'type' => 'maximize',
             'weight' => 2.0,
@@ -51,7 +51,7 @@ class CriteriaTest extends TestCase
             'p' => 10,
         ]);
 
-        $response->assertRedirect('/kriteria');
+        $response->assertRedirect('/pengaturan');
         $this->assertDatabaseHas('criterias', [
             'name' => 'Kriteria Baru',
             'type' => 'maximize',
@@ -70,7 +70,7 @@ class CriteriaTest extends TestCase
             'preference_function' => 'usual',
         ]);
 
-        $response = $this->actingAs($this->admin)->put("/kriteria/{$criteria->id}", [
+        $response = $this->actingAs($this->admin)->put("/pengaturan/{$criteria->id}", [
             'name' => 'Kriteria Diubah',
             'type' => 'minimize',
             'weight' => 1.8,
@@ -79,7 +79,7 @@ class CriteriaTest extends TestCase
             'q' => 2,
         ]);
 
-        $response->assertRedirect('/kriteria');
+        $response->assertRedirect('/pengaturan');
         $this->assertDatabaseHas('criterias', [
             'id' => $criteria->id,
             'name' => 'Kriteria Diubah',
@@ -100,9 +100,9 @@ class CriteriaTest extends TestCase
             'preference_function' => 'usual',
         ]);
 
-        $response = $this->actingAs($this->admin)->delete("/kriteria/{$criteria->id}");
+        $response = $this->actingAs($this->admin)->delete("/pengaturan/{$criteria->id}");
 
-        $response->assertRedirect('/kriteria');
+        $response->assertRedirect('/pengaturan');
         $this->assertDatabaseMissing('criterias', [
             'id' => $criteria->id,
         ]);

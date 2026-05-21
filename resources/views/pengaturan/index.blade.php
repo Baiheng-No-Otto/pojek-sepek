@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Syne:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    @vite(['resources/css/kriteria.css', 'resources/js/kriteria.js'])
+    @vite(['resources/css/pengaturan.css', 'resources/js/pengaturan.js'])
 </head>
 
 <body>
@@ -67,7 +67,7 @@
                     <h2>Kontrol Admin</h2>
                     <p>Gunakan reset untuk mengembalikan daftar kriteria ke nilai awal sistem.</p>
                 </div>
-                <form action="{{ route('kriteria.reset') }}" method="POST" onsubmit="return window.confirm('Kembalikan semua kriteria ke pengaturan awal? Kriteria tambahan/perubahan akan dihapus.');">
+                <form action="{{ route('pengaturan.reset') }}" method="POST" onsubmit="return window.confirm('Kembalikan semua kriteria ke pengaturan awal? Kriteria tambahan/perubahan akan dihapus.');">
                     @csrf
                     <button type="submit" class="btn-action btn-danger p-1" style="min-width: 120px;">Reset Kriteria Semula</button>
                 </form>
@@ -86,7 +86,7 @@
                     <div class="corner-deco corner-deco-bl"></div>
                     <div class="corner-deco corner-deco-br"></div>
 
-                    <form action="{{ route('kriteria.update', $criteria->id) }}" method="POST">
+                    <form action="{{ route('pengaturan.update', $criteria->id) }}" method="POST">
                         @csrf
                         @method('PUT')
 
@@ -177,7 +177,7 @@
                 <div class="corner-deco corner-deco-bl"></div>
                 <div class="corner-deco corner-deco-br"></div>
 
-                <form action="{{ route('kriteria.store') }}" method="POST">
+                <form action="{{ route('pengaturan.store') }}" method="POST">
                     @csrf
 
                     <div class="form-row-2">

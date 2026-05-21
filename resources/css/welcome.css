@@ -456,6 +456,13 @@ main {
     align-items: stretch;
 }
 
+.custom-bg-actions-row {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+    margin-bottom: 1em;
+}
+
 @media (min-width: 540px) {
     .actions-row {
         flex-direction: row;

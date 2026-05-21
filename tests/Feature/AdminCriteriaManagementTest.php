@@ -16,7 +16,7 @@ class AdminCriteriaManagementTest extends TestCase
 
     public function test_guest_is_redirected_to_admin_login_before_managing_criteria(): void
     {
-        $this->get('/kriteria')
+        $this->get('/pengaturan')
             ->assertRedirect('/login');
     }
 
@@ -25,14 +25,15 @@ class AdminCriteriaManagementTest extends TestCase
         $this->seed(AdminUserSeeder::class);
 
         $response = $this->post('/login', [
-            'email' => AdminUserSeeder::DEFAULT_EMAIL,
+            'username' => AdminUserSeeder::DEFAULT_USERNAME,
             'password' => AdminUserSeeder::DEFAULT_PASSWORD,
         ]);
 
-        $response->assertRedirect('/kriteria');
+        $response->assertRedirect('/pengaturan');
+        $response->assertSessionHasNoErrors();
         $this->assertAuthenticated();
 
-        $this->get('/kriteria')
+        $this->get('/pengaturan')
             ->assertOk()
             ->assertSee('Pengaturan')
             ->assertSee('Reset Password')
@@ -42,15 +43,15 @@ class AdminCriteriaManagementTest extends TestCase
     public function test_non_admin_user_cannot_login_to_admin_session(): void
     {
         User::factory()->create([
-            'email' => 'user@example.test',
+            'username' => 'user@example.test',
             'password' => Hash::make('password'),
             'is_admin' => false,
         ]);
 
         $this->post('/login', [
-            'email' => 'user@example.test',
+            'username' => 'user@example.test',
             'password' => 'password',
-        ])->assertSessionHasErrors('email');
+        ])->assertSessionHasErrors('username');
 
         $this->assertGuest();
     }
@@ -66,8 +67,8 @@ class AdminCriteriaManagementTest extends TestCase
         ]);
 
         $this->actingAs($admin)
-            ->post('/kriteria/reset')
-            ->assertRedirect('/kriteria')
+            ->post('/pengaturan/reset')
+            ->assertRedirect('/pengaturan')
             ->assertSessionHas('success');
 
         $this->assertSame(count(DefaultCriteria::records()), Criteria::count());
@@ -86,7 +87,7 @@ class AdminCriteriaManagementTest extends TestCase
     public function test_admin_can_update_password_and_login_with_new_password(): void
     {
         $admin = User::factory()->admin()->create([
-            'email' => 'admin@example.test',
+            'username' => 'admin@example.test',
             'password' => Hash::make('OldPassword123'),
         ]);
 
@@ -102,9 +103,9 @@ class AdminCriteriaManagementTest extends TestCase
         $this->post('/logout');
 
         $this->post('/login', [
-            'email' => 'admin@example.test',
+            'username' => 'admin@example.test',
             'password' => 'NewPassword123',
-        ])->assertRedirect('/kriteria');
+        ])->assertRedirect('/pengaturan');
 
         $this->assertAuthenticatedAs($admin->fresh());
     }

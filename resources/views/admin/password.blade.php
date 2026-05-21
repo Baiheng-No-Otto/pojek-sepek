@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Syne:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    @vite(['resources/css/kriteria.css'])
+    @vite(['resources/css/pengaturan.css'])
 </head>
 <body>
     <header>
@@ -16,7 +16,7 @@
             <span class="logo-skin">SKIN</span><span class="logo-decide">DECIDE</span>
         </a>
         <div class="nav-actions">
-            <a href="{{ route('kriteria.index') }}" class="nav-link">← Pengaturan Kriteria</a>
+            <a href="{{ route('pengaturan.index') }}" class="nav-link">← Pengaturan Kriteria</a>
             <form action="{{ route('logout') }}" method="POST" class="nav-form">
                 @csrf
                 <button type="submit" class="nav-link nav-button">Logout</button>

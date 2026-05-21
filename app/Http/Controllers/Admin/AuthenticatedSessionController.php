@@ -15,7 +15,7 @@ class AuthenticatedSessionController extends Controller
     public function create(): View|RedirectResponse
     {
         if (Auth::user()?->is_admin) {
-            return redirect()->route('kriteria.index');
+            return redirect()->route('pengaturan.index');
         }
 
         return view('admin.login');
@@ -27,7 +27,7 @@ class AuthenticatedSessionController extends Controller
 
         if (! Auth::attempt($credentials, $request->boolean('remember'))) {
             throw ValidationException::withMessages([
-                'email' => 'Email atau password admin tidak sesuai.',
+                'username' => 'Username atau password admin tidak sesuai.',
             ]);
         }
 
@@ -38,13 +38,13 @@ class AuthenticatedSessionController extends Controller
             $request->session()->regenerateToken();
 
             throw ValidationException::withMessages([
-                'email' => 'Akun ini tidak memiliki akses admin.',
+                'username' => 'Akun ini tidak memiliki akses admin.',
             ]);
         }
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('kriteria.index'));
+        return redirect()->intended(route('pengaturan.index'));
     }
 
     public function destroy(Request $request): RedirectResponse

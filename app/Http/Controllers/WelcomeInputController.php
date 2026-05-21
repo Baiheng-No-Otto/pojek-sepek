@@ -28,6 +28,6 @@ class WelcomeInputController extends Controller
     public function customBackground(): Response
     {
         # render the custom background view
-        return response()->view('custom-background');
+        return response()->view('pengaturan.custom-background');
     }
 }

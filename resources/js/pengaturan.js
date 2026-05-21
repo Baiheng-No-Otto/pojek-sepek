@@ -92,6 +92,6 @@ function confirmDelete(id, name) {
         return;
     }
 
-    form.action = `/kriteria/${id}`;
+    form.action = `/pengaturan/${id}`;
     form.submit();
 }

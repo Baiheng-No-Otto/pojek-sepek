@@ -18,7 +18,7 @@
             <span class="logo-skin">SKIN</span><span class="logo-decide">DECIDE</span>
         </div>
       <div class="header-actions">
-            <a href="/kriteria" class="header-link">
+            <a href="/pengaturan" class="header-link">
                 Pengaturan
             </a>
             <div class="header-badge">Promethee Team</div>
