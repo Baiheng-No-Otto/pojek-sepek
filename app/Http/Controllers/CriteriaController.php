@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCriteriaRequest;
 use App\Http\Requests\UpdateCriteriaRequest;
 use App\Models\Criteria;
+use App\Support\DefaultCriteria;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class CriteriaController extends Controller
@@ -19,24 +21,14 @@ class CriteriaController extends Controller
 
     public function store(StoreCriteriaRequest $request): RedirectResponse
     {
-        $data = $request->validated();
-        $data['p'] = $data['p'] ?? 0;
-        $data['q'] = $data['q'] ?? 0;
-        $data['s'] = $data['s'] ?? 0;
-
-        Criteria::create($data);
+        Criteria::create($this->criteriaData($request->validated()));
 
         return redirect()->route('kriteria.index')->with('success', 'Kriteria baru berhasil ditambahkan!');
     }
 
     public function update(UpdateCriteriaRequest $request, Criteria $criteria): RedirectResponse
     {
-        $data = $request->validated();
-        $data['p'] = $data['p'] ?? 0;
-        $data['q'] = $data['q'] ?? 0;
-        $data['s'] = $data['s'] ?? 0;
-
-        $criteria->update($data);
+        $criteria->update($this->criteriaData($request->validated()));
 
         return redirect()->route('kriteria.index')->with('success', 'Kriteria berhasil diperbarui!');
     }
@@ -46,5 +38,28 @@ class CriteriaController extends Controller
         $criteria->delete();
 
         return redirect()->route('kriteria.index')->with('success', 'Kriteria berhasil dihapus!');
+    }
+
+    public function reset(): RedirectResponse
+    {
+        DB::transaction(function (): void {
+            Criteria::query()->delete();
+            Criteria::insert(DefaultCriteria::recordsWithTimestamps());
+        });
+
+        return redirect()->route('kriteria.index')->with('success', 'Kriteria berhasil dikembalikan ke pengaturan awal.');
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     * @return array<string, mixed>
+     */
+    private function criteriaData(array $data): array
+    {
+        return array_replace([
+            'p' => 0,
+            'q' => 0,
+            's' => 0,
+        ], $data);
     }
 }

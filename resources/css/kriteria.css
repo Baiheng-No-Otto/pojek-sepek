@@ -629,3 +629,105 @@ select option {
 ::-webkit-scrollbar-thumb:hover {
     background: rgba(130, 205, 39, 0.4);
 }
+/* ─── ADMIN AUTH / SESSION CONTROLS ─── */
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.nav-form {
+    margin: 0;
+}
+
+.nav-button {
+    cursor: pointer;
+    background: transparent;
+}
+
+.admin-chip {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 8px 12px;
+    background: rgba(17, 24, 32, 0.7);
+}
+
+.admin-panel-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    background: rgba(17, 24, 32, 0.7);
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    border-radius: 14px;
+    padding: 22px 24px;
+    margin-bottom: 32px;
+}
+
+.admin-panel-card h2 {
+    margin: 0 0 6px;
+    font-family: 'Orbitron', monospace;
+    font-size: 1rem;
+    color: var(--text-primary);
+}
+
+.admin-panel-card p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.82rem;
+}
+
+.auth-container {
+    max-width: 760px;
+}
+
+.auth-alert {
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 18px;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.88rem;
+}
+
+.auth-alert-success {
+    border: 1px solid rgba(130, 205, 39, 0.35);
+    color: var(--neon);
+    background: rgba(130, 205, 39, 0.08);
+}
+
+.auth-alert-error,
+.toast-error {
+    border-color: rgba(239, 68, 68, 0.45);
+    color: #f87171;
+}
+
+.toast-error::before {
+    content: '!';
+    color: #f87171;
+    font-weight: 700;
+}
+
+.remember-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 18px;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+@media (max-width: 768px) {
+    .admin-panel-card {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .nav-actions {
+        justify-content: flex-start;
+    }
+}
