@@ -30,6 +30,8 @@ Route::middleware(['auth', 'admin'])->group(function (): void {
     Route::post('/kriteria/reset', [CriteriaController::class, 'reset'])->name('kriteria.reset');
     Route::put('/kriteria/{criteria}', [CriteriaController::class, 'update'])->name('kriteria.update');
     Route::delete('/kriteria/{criteria}', [CriteriaController::class, 'destroy'])->name('kriteria.destroy');
+  Route::get('/custom-background', function () {
+    return view('custom-background')};
 });
 
 Route::post('/skin-inputs', [WelcomeInputController::class, 'store'])->name('welcome-inputs.store');
