@@ -18,9 +18,6 @@
             <span class="logo-skin">SKIN</span><span class="logo-decide">DECIDE</span>
         </div>
       <div class="header-actions">
-    <a href="/custom-background" class="header-link">
-        Custom Background
-    </a>
             <a href="/kriteria" class="header-link">
                 Pengaturan
             </a>

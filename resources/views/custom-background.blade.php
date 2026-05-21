@@ -17,8 +17,8 @@
             <span class="logo-skin">SKIN</span><span class="logo-decide">DECIDE</span>
         </div>
       <div class="header-actions">
-    <a href="/" class="header-link" style="text-transform: uppercase; font-size: 13px; letter-spacing: 1px; display: inline-flex; align-items: center; gap: 6px;">
-        ← HALAMAN UTAMA
+    <a href="/kriteria" class="header-link" style="text-transform: uppercase; font-size: 13px; letter-spacing: 1px; display: inline-flex; align-items: center; gap: 6px;">
+        ← HALAMAN PENGATURAN
     </a>
 </div>
     </header>
@@ -47,7 +47,7 @@
                     </div>
                 </div>
 
-                <div class="actions-row" style="display: flex; gap: 15px; margin-top: 20px;">
+                <div class="actions-row" style="display: flex; gap: 15px; margin-top: 20px; margin-bottom: 20px;">
                     <button type="button" id="btn-pilih-foto" class="btn-add" style="margin: 0; flex: 1; justify-content: center;">
                         Pilih Gambar Lokal
                     </button>

@@ -12,6 +12,7 @@ export default defineConfig({
                 'resources/js/welcome.js',
                 'resources/css/kriteria.css',
                 'resources/js/kriteria.js',
+                'resources/js/custom-bg-page.js'
             ],
             refresh: true,
         }),
