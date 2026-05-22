@@ -893,3 +893,132 @@ select option {
     background: rgba(239, 68, 68, 0.16);
     transform: translateY(-1px);
 }
+
+/* ─── GLITCH EFFECT ─── */
+@keyframes glitch-skew {
+    0%, 100% { transform: skewX(0deg); }
+    2%        { transform: skewX(-3deg); }
+    4%        { transform: skewX(0deg); }
+    62%       { transform: skewX(0deg); }
+    64%       { transform: skewX(2deg); }
+    66%       { transform: skewX(0deg); }
+}
+
+/* Warna abu-abu saat glitch muncul */
+@keyframes glitch-color {
+    0%, 100% { color: inherit; }
+    2%, 4%   { color: #aaaaaa; }
+    62%, 66% { color: #aaaaaa; }
+}
+
+@keyframes glitch-clip-1 {
+    0%, 100% {
+        clip-path: inset(0 0 95% 0);
+        transform: translate(-3px, -2px);
+        opacity: 0;
+    }
+    5%, 10% {
+        clip-path: inset(10% 0 60% 0);
+        transform: translate(-3px, -2px);
+        opacity: 0.8;
+    }
+    15% {
+        clip-path: inset(40% 0 30% 0);
+        transform: translate(3px, 2px);
+        opacity: 0.8;
+    }
+    20% {
+        clip-path: inset(70% 0 5% 0);
+        transform: translate(-2px, 1px);
+        opacity: 0.6;
+    }
+    25%, 60% {
+        clip-path: inset(0 0 95% 0);
+        transform: translate(0);
+        opacity: 0;
+    }
+    65%, 70% {
+        clip-path: inset(20% 0 50% 0);
+        transform: translate(3px, -1px);
+        opacity: 0.7;
+    }
+    75% {
+        clip-path: inset(55% 0 20% 0);
+        transform: translate(-3px, 2px);
+        opacity: 0.7;
+    }
+    80% {
+        opacity: 0;
+    }
+}
+
+@keyframes glitch-clip-2 {
+    0%, 100% {
+        clip-path: inset(0 0 95% 0);
+        transform: translate(0);
+        opacity: 0;
+    }
+    8%, 13% {
+        clip-path: inset(50% 0 30% 0);
+        transform: translate(3px, 1px);
+        opacity: 0.7;
+    }
+    18% {
+        clip-path: inset(20% 0 65% 0);
+        transform: translate(-2px, -2px);
+        opacity: 0.6;
+    }
+    23%, 55% {
+        clip-path: inset(0 0 95% 0);
+        opacity: 0;
+    }
+    68%, 73% {
+        clip-path: inset(60% 0 15% 0);
+        transform: translate(-3px, 1px);
+        opacity: 0.8;
+    }
+    78% {
+        clip-path: inset(30% 0 45% 0);
+        transform: translate(2px, -1px);
+        opacity: 0.6;
+    }
+    83% {
+        opacity: 0;
+    }
+}
+
+/* Elemen utama — hanya kata Terbaik */
+.page-header h1 .glitch-text {
+    position: relative;
+    display: inline-block;
+    animation: glitch-skew 6s ease-in-out infinite,
+               glitch-color 6s ease-in-out infinite;
+}
+
+/* Pseudo layer 1 — glitch kiri */
+.page-header h1 .glitch-text::before {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    color: var(--glitch-color-1, #00ffff);
+    text-shadow: -3px 0 var(--glitch-shadow-1, rgba(0, 255, 255, 0.8));
+    animation: glitch-clip-1 6s ease-in-out infinite;
+    pointer-events: none;
+    left: 0;
+    top: 0;
+    width: 100%;
+}
+
+/* Pseudo layer 2 — glitch kanan */
+.page-header h1 .glitch-text::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    color: var(--glitch-color-2, #ff0000);
+    text-shadow: 3px 0 var(--glitch-shadow-2, rgba(255, 0, 0, 0.8));
+    animation: glitch-clip-2 6s ease-in-out infinite;
+    pointer-events: none;
+    left: 0;
+    top: 0;
+    width: 100%;
+}

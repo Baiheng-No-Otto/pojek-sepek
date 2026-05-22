@@ -2,7 +2,31 @@ import './bootstrap';
 import { confirmAction } from './confirm-modal';
 
 window.addEventListener('DOMContentLoaded', () => {
-    
+
+    // ==========================================
+    // 0. GLITCH COLOR RANDOMIZER
+    // ==========================================
+    const glitchPalettes = [
+        { c1: '#00ffff', s1: 'rgba(0,255,255,0.8)',   c2: '#ff0000', s2: 'rgba(255,0,0,0.8)'   },
+        { c1: '#ff0000', s1: 'rgba(255,0,0,0.8)',     c2: '#aaaaaa', s2: 'rgba(170,170,170,0.8)' },
+        { c1: '#aaaaaa', s1: 'rgba(170,170,170,0.8)', c2: '#00ffff', s2: 'rgba(0,255,255,0.8)' },
+        { c1: '#00ffff', s1: 'rgba(0,255,255,0.8)',   c2: '#ff0000', s2: 'rgba(255,0,0,0.8)'   },
+        { c1: '#ff0000', s1: 'rgba(255,0,0,0.8)',     c2: '#aaaaaa', s2: 'rgba(170,170,170,0.8)' },
+        { c1: '#aaaaaa', s1: 'rgba(170,170,170,0.8)', c2: '#00ffff', s2: 'rgba(0,255,255,0.8)' },
+    ];
+
+    function randomizeGlitchColors() {
+        const palette = glitchPalettes[Math.floor(Math.random() * glitchPalettes.length)];
+        const root = document.documentElement;
+        root.style.setProperty('--glitch-color-1',  palette.c1);
+        root.style.setProperty('--glitch-shadow-1', palette.s1);
+        root.style.setProperty('--glitch-color-2',  palette.c2);
+        root.style.setProperty('--glitch-shadow-2', palette.s2);
+    }
+
+    randomizeGlitchColors();
+    setInterval(randomizeGlitchColors, 6000);
+
     // ==========================================
     // 1. LOGIKA UTAMA CUSTOM BACKGROUND (DIATAS AGAR ANTI-MOGOK)
     // ==========================================
@@ -173,12 +197,12 @@ window.addEventListener('DOMContentLoaded', () => {
                         <div class="criteria-item">
                             <label>${kriteria.name}</label>
                             <select name="kriteria_${kriteria.id}" class="criteria-select">
-                                ${renderOption(1, '1 — Common (Basic / Elite / Season)', selectedValue)}
-                                ${renderOption(2, '2 — Exceptional (Special / Starlight Regular)', selectedValue)}
-                                ${renderOption(3, '3 — Deluxe (Epic Shop / Epic Squad Series / Zodiac)', selectedValue)}
-                                ${renderOption(4, '4 — Exquisite (Epic Limited / Collector / Lucky Box / Starlight Annual)', selectedValue)}
-                                ${renderOption(5, '5 — Grand (Collab Anime/Movie, Aspirants, Exorcists, Mistbenders)', selectedValue)}
-                                ${renderOption(6, '6 — Legend (Legend Magic Wheel / Legend Limited Event)', selectedValue)}
+                                ${renderOption(1, 'Common (Basic / Elite / Season)', selectedValue)}
+                                ${renderOption(2, 'Exceptional (Special / Starlight Regular)', selectedValue)}
+                                ${renderOption(3, 'Deluxe (Epic Shop / Epic Squad Series / Zodiac)', selectedValue)}
+                                ${renderOption(4, 'Exquisite (Epic Limited / Collector / Lucky Box / Starlight Annual)', selectedValue)}
+                                ${renderOption(5, 'Grand (Collab Anime/Movie, Aspirants, Exorcists, Mistbenders)', selectedValue)}
+                                ${renderOption(6, 'Legend (Legend Magic Wheel / Legend Limited Event)', selectedValue)}
                             </select>
                         </div>`;
             } else if (kriteria.isPreferensi) {
@@ -187,13 +211,13 @@ window.addEventListener('DOMContentLoaded', () => {
                         <div class="criteria-item">
                             <label>${kriteria.name}</label>
                             <select name="kriteria_${kriteria.id}" class="criteria-select">
-                                ${renderOption(1, '1 — Tidak Pernah Dipakai', selectedValue)}
-                                ${renderOption(2, '2 — Sangat Jarang Dipakai', selectedValue)}
-                                ${renderOption(3, '3 — Jarang Dipakai', selectedValue)}
-                                ${renderOption(4, '4 — Kadang-kadang', selectedValue)}
-                                ${renderOption(5, '5 — Sering Dipakai', selectedValue)}
-                                ${renderOption(6, '6 — Sangat Sering Dipakai', selectedValue)}
-                                ${renderOption(7, '7 — Hero Andalan Utama (Signature)', selectedValue)}
+                                ${renderOption(1, 'Tidak Pernah Dipakai', selectedValue)}
+                                ${renderOption(2, 'Sangat Jarang Dipakai', selectedValue)}
+                                ${renderOption(3, 'Jarang Dipakai', selectedValue)}
+                                ${renderOption(4, 'Kadang-kadang', selectedValue)}
+                                ${renderOption(5, 'Sering Dipakai', selectedValue)}
+                                ${renderOption(6, 'Sangat Sering Dipakai', selectedValue)}
+                                ${renderOption(7, 'Hero Andalan Utama (Signature)', selectedValue)}
                             </select>
                         </div>`;
             } else if (kriteria.isKetersediaan) {
@@ -212,13 +236,13 @@ window.addEventListener('DOMContentLoaded', () => {
                         <div class="criteria-item">
                             <label>${kriteria.name}</label>
                             <select name="kriteria_${kriteria.id}" class="criteria-select">
-                                ${renderOption(1, '1 — Sangat Kurang', selectedValue)}
-                                ${renderOption(2, '2 — Kurang', selectedValue)}
-                                ${renderOption(3, '3 — Agak Kurang', selectedValue)}
-                                ${renderOption(4, '4 — Standar', selectedValue)}
-                                ${renderOption(5, '5 — Lumayan Bagus', selectedValue)}
-                                ${renderOption(6, '6 — Bagus', selectedValue)}
-                                ${renderOption(7, '7 — Sangat Bagus', selectedValue)}
+                                ${renderOption(1, 'Sangat Kurang', selectedValue)}
+                                ${renderOption(2, 'Kurang', selectedValue)}
+                                ${renderOption(3, 'Agak Kurang', selectedValue)}
+                                ${renderOption(4, 'Standar', selectedValue)}
+                                ${renderOption(5, 'Lumayan Bagus', selectedValue)}
+                                ${renderOption(6, 'Bagus', selectedValue)}
+                                ${renderOption(7, 'Sangat Bagus', selectedValue)}
                             </select>
                         </div>`;
             }
