@@ -172,12 +172,12 @@ window.addEventListener('DOMContentLoaded', () => {
                         <div class="criteria-item">
                             <label>${kriteria.name}</label>
                             <select name="kriteria_${kriteria.id}" class="criteria-select">
-                                ${renderOption(1, '1 — Common (Basic / Elite / Season)', selectedValue)}
-                                ${renderOption(2, '2 — Exceptional (Special / Starlight Regular)', selectedValue)}
-                                ${renderOption(3, '3 — Deluxe (Epic Shop / Epic Squad Series / Zodiac)', selectedValue)}
-                                ${renderOption(4, '4 — Exquisite (Epic Limited / Collector / Lucky Box / Starlight Annual)', selectedValue)}
-                                ${renderOption(5, '5 — Grand (Collab Anime/Movie, Aspirants, Exorcists, Mistbenders)', selectedValue)}
-                                ${renderOption(6, '6 — Legend (Legend Magic Wheel / Legend Limited Event)', selectedValue)}
+                                ${renderOption(1, 'Common (Basic / Elite / Season)', selectedValue)}
+                                ${renderOption(2, 'Exceptional (Special / Starlight Regular)', selectedValue)}
+                                ${renderOption(3, 'Deluxe (Epic Shop / Epic Squad Series / Zodiac)', selectedValue)}
+                                ${renderOption(4, 'Exquisite (Epic Limited / Collector / Lucky Box / Starlight Annual)', selectedValue)}
+                                ${renderOption(5, 'Grand (Collab Anime/Movie, Aspirants, Exorcists, Mistbenders)', selectedValue)}
+                                ${renderOption(6, 'Legend (Legend Magic Wheel / Legend Limited Event)', selectedValue)}
                             </select>
                         </div>`;
             } else if (kriteria.isPreferensi) {
@@ -186,13 +186,13 @@ window.addEventListener('DOMContentLoaded', () => {
                         <div class="criteria-item">
                             <label>${kriteria.name}</label>
                             <select name="kriteria_${kriteria.id}" class="criteria-select">
-                                ${renderOption(1, '1 — Tidak Pernah Dipakai', selectedValue)}
-                                ${renderOption(2, '2 — Sangat Jarang Dipakai', selectedValue)}
-                                ${renderOption(3, '3 — Jarang Dipakai', selectedValue)}
-                                ${renderOption(4, '4 — Kadang-kadang', selectedValue)}
-                                ${renderOption(5, '5 — Sering Dipakai', selectedValue)}
-                                ${renderOption(6, '6 — Sangat Sering Dipakai', selectedValue)}
-                                ${renderOption(7, '7 — Hero Andalan Utama (Signature)', selectedValue)}
+                                ${renderOption(1, 'Tidak Pernah Dipakai', selectedValue)}
+                                ${renderOption(2, 'Sangat Jarang Dipakai', selectedValue)}
+                                ${renderOption(3, 'Jarang Dipakai', selectedValue)}
+                                ${renderOption(4, 'Kadang-kadang', selectedValue)}
+                                ${renderOption(5, 'Sering Dipakai', selectedValue)}
+                                ${renderOption(6, 'Sangat Sering Dipakai', selectedValue)}
+                                ${renderOption(7, 'Hero Andalan Utama (Signature)', selectedValue)}
                             </select>
                         </div>`;
             } else if (kriteria.isKetersediaan) {
@@ -211,13 +211,13 @@ window.addEventListener('DOMContentLoaded', () => {
                         <div class="criteria-item">
                             <label>${kriteria.name}</label>
                             <select name="kriteria_${kriteria.id}" class="criteria-select">
-                                ${renderOption(1, '1 — Sangat Kurang', selectedValue)}
-                                ${renderOption(2, '2 — Kurang', selectedValue)}
-                                ${renderOption(3, '3 — Agak Kurang', selectedValue)}
-                                ${renderOption(4, '4 — Standar', selectedValue)}
-                                ${renderOption(5, '5 — Lumayan Bagus', selectedValue)}
-                                ${renderOption(6, '6 — Bagus', selectedValue)}
-                                ${renderOption(7, '7 — Sangat Bagus', selectedValue)}
+                                ${renderOption(1, 'Sangat Kurang', selectedValue)}
+                                ${renderOption(2, 'Kurang', selectedValue)}
+                                ${renderOption(3, 'Agak Kurang', selectedValue)}
+                                ${renderOption(4, 'Standar', selectedValue)}
+                                ${renderOption(5, 'Lumayan Bagus', selectedValue)}
+                                ${renderOption(6, 'Bagus', selectedValue)}
+                                ${renderOption(7, 'Sangat Bagus', selectedValue)}
                             </select>
                         </div>`;
             }
