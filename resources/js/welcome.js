@@ -371,14 +371,26 @@ window.addEventListener('DOMContentLoaded', () => {
         });
 
         try {
-            await persistWelcomeInputs(true);
-
-            const response = await fetch('/api/hitung-rekomendasi', {
+            const recommendationRequest = fetch('/api/hitung-rekomendasi', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
                 body: JSON.stringify({ alternatives: payloadAlternatives }),
             });
-            const hasil = await response.json();
+
+            const [response] = await Promise.all([
+                recommendationRequest,
+                persistWelcomeInputs(true),
+            ]);
+            const hasil = await parseJsonResponse(response);
+
+            if (!response.ok) {
+                shakeAlert(hasil.message || 'Gagal memproses rekomendasi.');
+
+                return;
+            }
 
             if (hasil.status === 'success') {
                 tampilkanTabelHasil(hasil.rekomendasi);
@@ -387,11 +399,21 @@ window.addEventListener('DOMContentLoaded', () => {
             }
         } catch (error) {
             console.error(error);
-            shakeAlert('Gagal menyambung ke server API Laravel.');
+            shakeAlert('Gagal memproses rekomendasi. Periksa koneksi atau server API.');
         } finally {
             btn.classList.remove('loading');
             spinner.style.display = 'none';
             calcIcon.style.display = 'block';
+        }
+    }
+
+    async function parseJsonResponse(response) {
+        try {
+            return await response.json();
+        } catch (error) {
+            console.error(error);
+
+            return {};
         }
     }
 

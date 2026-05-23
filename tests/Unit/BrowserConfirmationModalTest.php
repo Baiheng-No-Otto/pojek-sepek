@@ -55,6 +55,18 @@ class BrowserConfirmationModalTest extends TestCase
         $this->assertStringContainsString('@keyframes borderLightBottom', $welcomeStyles);
     }
 
+    public function test_recommendation_request_uses_async_fetch_without_misleading_connection_copy(): void
+    {
+        $welcomeScript = file_get_contents($this->sourcePath('resources/js/welcome.js'));
+
+        $this->assertIsString($welcomeScript);
+        $this->assertStringContainsString("fetch('/api/hitung-rekomendasi'", $welcomeScript);
+        $this->assertStringContainsString('Promise.all([', $welcomeScript);
+        $this->assertStringContainsString("'Accept': 'application/json'", $welcomeScript);
+        $this->assertStringContainsString('Gagal memproses rekomendasi. Periksa koneksi atau server API.', $welcomeScript);
+        $this->assertStringNotContainsString('Gagal menyambung ke server API Laravel.', $welcomeScript);
+    }
+
     private function sourcePath(string $path): string
     {
         return dirname(__DIR__, 2).DIRECTORY_SEPARATOR.str_replace('/', DIRECTORY_SEPARATOR, $path);
