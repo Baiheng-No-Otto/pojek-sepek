@@ -283,8 +283,31 @@ window.addEventListener('DOMContentLoaded', () => {
         element.classList.add('is-removing');
         window.setTimeout(() => {
             element.remove();
+            renumberSkinCards();
             schedulePersistWelcomeInputs();
         }, 280);
+    }
+
+    function renumberSkinCards() {
+        const rows = document.querySelectorAll('.class-skin-item');
+
+        rows.forEach((row, index) => {
+            const skinNumber = index + 1;
+            const numberLabel = row.querySelector('.skin-card-number');
+            const removeButton = row.querySelector('[data-action="remove-skin"]');
+
+            row.id = `skin-row-${skinNumber}`;
+
+            if (numberLabel) {
+                numberLabel.textContent = `SKIN ${skinNumber}`;
+            }
+
+            if (removeButton) {
+                removeButton.dataset.skinId = String(skinNumber);
+            }
+        });
+
+        urutanSkin = rows.length;
     }
 
     function collectWelcomeInputs() {
