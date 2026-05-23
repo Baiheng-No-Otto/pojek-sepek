@@ -25,7 +25,7 @@ class StoreCustomBackgroundRequest extends FormRequest
         return [
             'background' => [
                 'required',
-                File::image()->max(5 * 1024),
+                File::image()->max(12 * 1024),
             ],
         ];
     }
