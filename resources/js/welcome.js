@@ -24,44 +24,10 @@ window.addEventListener('DOMContentLoaded', () => {
     randomizeGlitchColors();
     setInterval(randomizeGlitchColors, 6000);
 
-    // ==========================================
-    // 1. LOGIKA UTAMA CUSTOM BACKGROUND (DIATAS AGAR ANTI-MOGOK)
-    // ==========================================
-    const btnTriggerBg = document.getElementById('btn-trigger-bg');
-    const inputCustomBg = document.getElementById('input-custom-bg');
+    const configuredBackground = document.body?.dataset.customBackgroundUrl;
 
-    // Ambil dan pasang background jika ada di local storage browser
-    const savedBg = localStorage.getItem('skin_decide_custom_bg');
-    if (savedBg) {
-        terapkanBackground(savedBg);
-    }
-
-    if (btnTriggerBg) {
-        btnTriggerBg.addEventListener('click', (e) => {
-            e.preventDefault(); 
-            e.stopPropagation();
-            
-            // Mengambil element langsung saat diklik untuk memastikan DOM siap
-            const inputLokal = document.getElementById('input-custom-bg');
-            if (inputLokal) {
-                inputLokal.click();
-            }
-        });
-    }
-
-    if (inputCustomBg) {
-        inputCustomBg.addEventListener('change', (event) => {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const base64Image = e.target.result;
-                    localStorage.setItem('skin_decide_custom_bg', base64Image);
-                    terapkanBackground(base64Image);
-                };
-                reader.readAsDataURL(file);
-            }
-        });
+    if (configuredBackground) {
+        terapkanBackground(configuredBackground);
     }
 
     function terapkanBackground(urlGambar) {

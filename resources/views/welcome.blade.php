@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Syne:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     @vite(['resources/css/welcome.css', 'resources/js/welcome.js'])
 </head>
-<body data-criterias='@json($criterias)' data-saved-inputs='@json($savedWelcomeInputs)'>
+<body style="{{ $customBackgroundStyle }}" data-custom-background-url="{{ $customBackgroundUrl }}" data-criterias='@json($criterias)' data-saved-inputs='@json($savedWelcomeInputs)'>
 
     <header>
         <div class="logo">
@@ -30,7 +30,7 @@
 
             <div class="page-header">
                 <div class="label">SkinDecide - Asisten Rekomendasi Skin</div>
-                <h1>Rekomendasi <span>Skin</span> <span class="glitch-text" data-text="Terbaik">Terbaik</span></h1>
+                <h1>Rekomendasi <span>Skin</span> <span class="glitch-text" data-glitch="Terbaik" aria-label="Terbaik">Terbaik</span></h1>
                 <p>Masukkan nama skin yang ingin dibandingkan beserta penilaian kriteria kamu <br> (Masukkan Skala 1-7, khusus Kategori masukkan skala 1-6, dan untuk Harga masukkan dalam jumlah Diamond)</p>
             </div>
 
@@ -86,8 +86,6 @@
         <div class="footer-brand"><span>SKIN</span>DECIDE</div>
         <div class="footer-copy">&copy; 2026 Promethee Team</div>
     </footer>
-
-    <input type="file" id="input-custom-bg" accept="image/*" style="display: none;">
 
 </body>
 </html>

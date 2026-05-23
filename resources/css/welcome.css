@@ -1054,7 +1054,7 @@ select option {
 
 /* Pseudo layer 1 — glitch kiri */
 .page-header h1 .glitch-text::before {
-    content: attr(data-text);
+    content: attr(data-glitch);
     position: absolute;
     inset: 0;
     color: var(--glitch-color-1, #00ffff);
@@ -1068,7 +1068,7 @@ select option {
 
 /* Pseudo layer 2 — glitch kanan */
 .page-header h1 .glitch-text::after {
-    content: attr(data-text);
+    content: attr(data-glitch);
     position: absolute;
     inset: 0;
     color: var(--glitch-color-2, #ff0000);
