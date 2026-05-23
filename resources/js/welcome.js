@@ -5,11 +5,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const glitchPalettes = [
         { c1: '#00ffffcc', s1: '#00ffffcc',   c2: '#ff1457cc', s2: '#ff1457cc'   },
-        { c1: '#ff1457cc', s1: '#ff1457cc',     c2: '#eeeeee', s2: '#fafafaee' },
-        { c1: '#eeeeee', s1: '#fafafaee', c2: '#00ffffcc', s2: '#00ffffcc' },
+        { c1: '#ff1457cc', s1: '#ff1457cc',     c2: '#fafafaee', s2: '#fafafaee' },
+        { c1: '#fafafaee', s1: '#fafafaee', c2: '#00ffffcc', s2: '#00ffffcc' },
         { c1: '#00ffffcc', s1: '#00ffffcc',   c2: '#ff1457cc', s2: '#ff1457cc'   },
-        { c1: '#ff1457cc', s1: '#ff1457cc',     c2: '#eeeeee', s2: '#fafafaee' },
-        { c1: '#eeeeee', s1: '#fafafaee', c2: '#00ffffcc', s2: '#00ffffcc' },
+        { c1: '#ff1457cc', s1: '#ff1457cc',     c2: '#fafafaee', s2: '#fafafaee' },
+        { c1: '#fafafaee', s1: '#fafafaee', c2: '#00ffffcc', s2: '#00ffffcc' },
     ];
 
     function randomizeGlitchColors() {
@@ -133,6 +133,13 @@ window.addEventListener('DOMContentLoaded', () => {
         return ` value="${escapeHtml(value)}"`;
     }
 
+    function urutkanUlangNomorSkin() {
+        const semuaLabelNomor = document.querySelectorAll('.skin-card-number');
+        semuaLabelNomor.forEach((label, index) => {
+            label.textContent = `SKIN ${index + 1}`;
+        });
+    }
+
     function tambahBarisSkin(savedAlternative = null) {
         urutanSkin += 1;
 
@@ -228,6 +235,9 @@ window.addEventListener('DOMContentLoaded', () => {
                 </div>`;
 
         container.appendChild(card);
+
+        // Menyelaraskan nomor urut sesaat setelah kartu baru masuk ke layar
+        urutkanUlangNomorSkin();
     }
 
     function handleContainerClick(event) {
@@ -249,6 +259,10 @@ window.addEventListener('DOMContentLoaded', () => {
         element.classList.add('is-removing');
         window.setTimeout(() => {
             element.remove();
+            
+            // Urutkan ulang nomor skin agar teks SKIN X tetap berurutan (1, 2, 3...) setelah ada yang dihapus
+            urutkanUlangNomorSkin();
+            
             schedulePersistWelcomeInputs();
         }, 280);
     }
