@@ -25,7 +25,7 @@ class SkinRecommendationTest extends TestCase
         $response->assertSee('SkinDecide');
         $response->assertSee('Promethee', false);
         $response->assertSee('data-criterias=', false);
-        $response->assertSee('class="glitch-text" data-glitch="Terbaik" aria-label="Terbaik">Terbaik</span>', false);
+        $response->assertSee('class="glitch-text" data-text="Terbaik">Terbaik</span>', false);
         $response->assertDontSee('<span>Skin</span> Terbaik</span></h1>', false);
         $response->assertDontSee('onsubmit="prosesHitung(event)"', false);
         $response->assertDontSee('onclick="tambahBarisSkin()"', false);
@@ -56,6 +56,23 @@ class SkinRecommendationTest extends TestCase
                     '*' => ['name', 'code', 'leaving_flow', 'entering_flow', 'net_flow', 'rank'],
                 ],
             ]);
+    }
+
+    public function test_browser_get_requests_to_the_recommendation_api_redirect_to_the_homepage(): void
+    {
+        $response = $this->get('/api/hitung-rekomendasi');
+
+        $response->assertRedirect('/');
+    }
+
+    public function test_json_get_requests_to_the_recommendation_api_return_a_clear_405_response(): void
+    {
+        $response = $this->getJson('/api/hitung-rekomendasi');
+
+        $response->assertStatus(405)
+            ->assertHeader('Allow', 'POST')
+            ->assertJsonPath('status', 'error')
+            ->assertJsonPath('message', 'Gunakan metode POST untuk endpoint ini.');
     }
 
     public function test_recommendation_api_requires_two_skins(): void
@@ -96,5 +113,21 @@ class SkinRecommendationTest extends TestCase
             ->assertUnprocessable()
             ->assertJsonPath('status', 'error')
             ->assertJsonPath('message', 'Unsupported PROMETHEE preference type [tidak_didukung].');
+    }
+
+    public function test_recommendation_api_allows_flutter_web_cors_preflight(): void
+    {
+        $response = $this
+            ->withHeaders([
+                'Origin' => 'http://localhost:12345',
+                'Access-Control-Request-Method' => 'POST',
+                'Access-Control-Request-Headers' => 'content-type, accept',
+            ])
+            ->options('/api/hitung-rekomendasi');
+
+        $response->assertNoContent();
+        $response->assertHeader('Access-Control-Allow-Origin', '*');
+        $response->assertHeader('Access-Control-Allow-Methods');
+        $response->assertHeader('Access-Control-Allow-Headers');
     }
 }
