@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Syne:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     @vite(['resources/css/welcome.css', 'resources/js/welcome.js'])
 </head>
-<body data-criterias='@json($criterias)' data-saved-inputs='@json($savedWelcomeInputs)'>
+<body style="{{ $customBackgroundStyle }}" data-custom-background-url="{{ $customBackgroundUrl }}" data-criterias='@json($criterias)' data-saved-inputs='@json($savedWelcomeInputs)'>
 
     <header>
         <div class="logo">

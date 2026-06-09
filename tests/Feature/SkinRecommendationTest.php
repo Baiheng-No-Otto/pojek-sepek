@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Criteria;
+use App\Support\DefaultCriteria;
 use Database\Seeders\CriteriaSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -56,6 +57,37 @@ class SkinRecommendationTest extends TestCase
                     '*' => ['name', 'code', 'leaving_flow', 'entering_flow', 'net_flow', 'rank'],
                 ],
             ]);
+    }
+
+    public function test_recommendation_api_accepts_positional_score_keys_when_criteria_ids_have_drifted(): void
+    {
+        $criteria = collect(DefaultCriteria::recordsWithTimestamps())
+            ->values()
+            ->map(fn (array $record, int $index): array => [
+                'id' => 57 + $index,
+                ...$record,
+            ])
+            ->all();
+
+        Criteria::query()->delete();
+        Criteria::insert($criteria);
+
+        $response = $this->postJson('/api/hitung-rekomendasi', [
+            'alternatives' => [
+                [
+                    'name' => 'Skin Mahal Standar',
+                    'scores' => [1 => 5000, 2 => 2, 3 => 3, 4 => 3, 5 => 3, 6 => 3, 7 => 3, 8 => 1],
+                ],
+                [
+                    'name' => 'Skin Murah Epic',
+                    'scores' => [1 => 1000, 2 => 5, 3 => 6, 4 => 6, 5 => 6, 6 => 7, 7 => 7, 8 => 2],
+                ],
+            ],
+        ]);
+
+        $response->assertOk()
+            ->assertJsonPath('status', 'success')
+            ->assertJsonPath('rekomendasi.0.name', 'Skin Murah Epic');
     }
 
     public function test_browser_get_requests_to_the_recommendation_api_redirect_to_the_homepage(): void
